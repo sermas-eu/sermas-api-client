@@ -69,34 +69,23 @@ export const $JwtTokenDto = {
   },
 } as const;
 
-export const $RefreshTokenRequestDto = {
+export const $PlatformRefreshTokenRequestDto = {
   properties: {
     appId: {
       type: 'string',
-      isRequired: true,
     },
     clientId: {
       type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
+      isRequired: true,
     },
-    requestId: {
+    clientSecret: {
       type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
     },
     refreshToken: {
       type: 'string',
       isRequired: true,
     },
-    clientSecret: {
+    accessToken: {
       type: 'string',
     },
   },
@@ -166,7 +155,12 @@ export const $RepositoryAvatarDto = {
       isRequired: true,
     },
     type: {
-      type: 'RepositoryAssetTypes',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'RepositoryAssetTypes',
+        },
+      ],
       isRequired: true,
     },
     name: {
@@ -180,11 +174,21 @@ export const $RepositoryAvatarDto = {
       type: 'RepositoryAssetMetadataDto',
     },
     modelType: {
-      type: 'ModelType',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'ModelType',
+        },
+      ],
       isRequired: true,
     },
     gender: {
-      type: 'ModelGender',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'ModelGender',
+        },
+      ],
       isRequired: true,
     },
     camera: {
@@ -217,7 +221,12 @@ export const $RepositoryBackgroundDto = {
       isRequired: true,
     },
     type: {
-      type: 'RepositoryAssetTypes',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'RepositoryAssetTypes',
+        },
+      ],
       isRequired: true,
     },
     name: {
@@ -260,7 +269,12 @@ export const $RepositoryRobotModelDto = {
       isRequired: true,
     },
     type: {
-      type: 'RepositoryAssetTypes',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'RepositoryAssetTypes',
+        },
+      ],
       isRequired: true,
     },
     name: {
@@ -290,7 +304,12 @@ export const $RepositoryDocumentDto = {
       isRequired: true,
     },
     type: {
-      type: 'RepositoryAssetTypes',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'RepositoryAssetTypes',
+        },
+      ],
       isRequired: true,
     },
     name: {
@@ -313,7 +332,12 @@ export const $RepositoryAnimationDto = {
       isRequired: true,
     },
     type: {
-      type: 'RepositoryAssetTypes',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'RepositoryAssetTypes',
+        },
+      ],
       isRequired: true,
     },
     name: {
@@ -457,7 +481,13 @@ export const $ToolsParameterSchema = {
       isRequired: true,
     },
     type: {
-      type: 'ToolsParameterSchemaTypes',
+      type: 'all-of',
+      description: `parameter type (one of string,number,boolean,object)`,
+      contains: [
+        {
+          type: 'ToolsParameterSchemaTypes',
+        },
+      ],
       isRequired: true,
     },
     description: {
@@ -738,7 +768,7 @@ export const $AppClientDto = {
     },
     clientId: {
       type: 'string',
-      description: `The clientId, must be unique in the client list and in uuid format.`,
+      description: `The clientId, unique in the app (module clients use the moduleId, e.g. avatar).`,
     },
     secret: {
       type: 'string',
@@ -754,7 +784,26 @@ export const $AppClientDto = {
 } as const;
 
 export const $LLMSettingsDto = {
-  properties: {},
+  properties: {
+    chat: {
+      type: 'string',
+    },
+    tools: {
+      type: 'string',
+    },
+    sentiment: {
+      type: 'string',
+    },
+    tasks: {
+      type: 'string',
+    },
+    intent: {
+      type: 'string',
+    },
+    translation: {
+      type: 'string',
+    },
+  },
 } as const;
 
 export const $AppPromptDto = {
@@ -825,7 +874,13 @@ export const $AppSettingsDto = {
       description: `Toggle the welcome message sent at the start of a session`,
     },
     interactionStart: {
-      type: 'InteractionStartTypes',
+      type: 'all-of',
+      description: `An interaction modality to start a session`,
+      contains: [
+        {
+          type: 'InteractionStartTypes',
+        },
+      ],
     },
     theme: {
       type: 'dictionary',
@@ -894,7 +949,13 @@ export const $TaskEventTriggerDto = {
 export const $TaskEventDto = {
   properties: {
     type: {
-      type: 'TaskEventType',
+      type: 'all-of',
+      description: `Type of event to trigger`,
+      contains: [
+        {
+          type: 'TaskEventType',
+        },
+      ],
       isRequired: true,
     },
     message: {
@@ -994,7 +1055,13 @@ export const $TaskFieldDto = {
       description: `Skip chat response`,
     },
     type: {
-      type: 'TaskSchemaDataType',
+      type: 'all-of',
+      description: `Data type`,
+      contains: [
+        {
+          type: 'TaskSchemaDataType',
+        },
+      ],
       isRequired: true,
     },
     required: {
@@ -1150,10 +1217,6 @@ export const $DialogueTaskDto = {
   },
 } as const;
 
-export const $RagDocumentsDto = {
-  properties: {},
-} as const;
-
 export const $PlatformAppDto = {
   properties: {
     appId: {
@@ -1217,15 +1280,6 @@ export const $PlatformAppDto = {
         type: 'DialogueTaskDto',
       },
     },
-    rag: {
-      type: 'all-of',
-      description: `List of RAG documents or urls to import`,
-      contains: [
-        {
-          type: 'RagDocumentsDto',
-        },
-      ],
-    },
   },
 } as const;
 
@@ -1280,14 +1334,9 @@ export const $CreatePlatformAppDto = {
         type: 'DialogueTaskDto',
       },
     },
-    rag: {
-      type: 'all-of',
-      description: `List of RAG documents or urls to import`,
-      contains: [
-        {
-          type: 'RagDocumentsDto',
-        },
-      ],
+    appId: {
+      type: 'string',
+      description: `The app id, generated when missing`,
     },
   },
 } as const;
@@ -1309,10 +1358,8 @@ export const $PlatformAppExportFilterDto = {
 export const $DialogueDocumentOptionsDto = {
   properties: {
     parser: {
-      type: 'dictionary',
-      contains: {
-        properties: {},
-      },
+      type: 'string',
+      description: `Define the document splitting strategy. "phrase" split by sentence, "single-line" use each line as document, "double-line" use double break-line as document`,
     },
   },
 } as const;
@@ -1356,26 +1403,6 @@ export const $DialogueDocumentDto = {
     },
     metadata: {
       type: 'DialogueDocumentMetadataDto',
-    },
-  },
-} as const;
-
-export const $RagWebsiteDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    url: {
-      type: 'string',
-      isRequired: true,
-    },
-    filterPaths: {
-      type: 'array',
-      contains: {
-        type: 'string',
-      },
-      isRequired: true,
     },
   },
 } as const;
@@ -1615,6 +1642,39 @@ export const $RegistrationResponseDto = {
   },
 } as const;
 
+export const $RefreshTokenRequestDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    refreshToken: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientSecret: {
+      type: 'string',
+    },
+  },
+} as const;
+
 export const $AuthorizationUser = {
   properties: {
     moduleId: {
@@ -1655,6 +1715,7 @@ export const $UpdateUserRequestDto = {
     userId: {
       type: 'string',
       description: `Reference to the user interacting with the system`,
+      isRequired: true,
     },
     ts: {
       type: 'string',
@@ -1745,7 +1806,12 @@ export const $ObjectDetectionRequest = {
       format: 'byte',
     },
     detectionType: {
-      type: 'ObjectDetectionType',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'ObjectDetectionType',
+        },
+      ],
       isRequired: true,
     },
     filter: {
@@ -1867,7 +1933,13 @@ export const $DialogueTextToSpeechDto = {
       description: `User session identifier`,
     },
     actor: {
-      type: 'DialogueActor',
+      type: 'all-of',
+      description: `Actor providing the text, can be user or agent`,
+      contains: [
+        {
+          type: 'DialogueActor',
+        },
+      ],
     },
     text: {
       type: 'string',
@@ -1886,10 +1958,13 @@ export const $DialogueTextToSpeechDto = {
       description: `User emotion, if available`,
     },
     llm: {
-      type: 'dictionary',
-      contains: {
-        properties: {},
-      },
+      type: 'all-of',
+      description: `LLM engine to use`,
+      contains: [
+        {
+          type: 'LLMSettingsDto',
+        },
+      ],
     },
     avatar: {
       type: 'string',
@@ -1946,7 +2021,13 @@ export const $DialogueMessageDto = {
       description: `User session identifier`,
     },
     actor: {
-      type: 'DialogueActor',
+      type: 'all-of',
+      description: `Actor providing the text, can be user or agent`,
+      contains: [
+        {
+          type: 'DialogueActor',
+        },
+      ],
     },
     text: {
       type: 'string',
@@ -1966,10 +2047,13 @@ export const $DialogueMessageDto = {
       description: `User emotion, if available`,
     },
     llm: {
-      type: 'dictionary',
-      contains: {
-        properties: {},
-      },
+      type: 'all-of',
+      description: `LLM engine to use`,
+      contains: [
+        {
+          type: 'LLMSettingsDto',
+        },
+      ],
     },
     avatar: {
       type: 'string',
@@ -2009,11 +2093,23 @@ export const $DialogueMemoryMessageDto = {
       isRequired: true,
     },
     role: {
-      type: 'LLMRole',
+      type: 'all-of',
+      description: `role of the message provider`,
+      contains: [
+        {
+          type: 'LLMRole',
+        },
+      ],
       isRequired: true,
     },
     type: {
-      type: 'MemoryMessageType',
+      type: 'all-of',
+      description: `type of message, default to "message"`,
+      contains: [
+        {
+          type: 'MemoryMessageType',
+        },
+      ],
     },
     name: {
       type: 'string',
@@ -2060,7 +2156,13 @@ export const $DialogueTaskRecordDto = {
       isRequired: true,
     },
     status: {
-      type: 'TaskEventType',
+      type: 'all-of',
+      description: `Status of the task`,
+      contains: [
+        {
+          type: 'TaskEventType',
+        },
+      ],
     },
     values: {
       type: 'dictionary',
@@ -2125,10 +2227,1986 @@ export const $DialogueToolsRepositoryDto = {
     tools: {
       type: 'array',
       contains: {
-        type: 'unknown[]',
+        type: 'AppToolsDTO',
       },
     },
   },
+} as const;
+
+export const $UIContentMetadataDto = {
+  properties: {
+    repositoryId: {
+      type: 'string',
+      description: `Reference to a tool repository ID`,
+    },
+    chunks: {
+      type: 'array',
+      contains: {
+        type: 'dictionary',
+        contains: {
+          properties: {},
+        },
+      },
+    },
+  },
+} as const;
+
+export const $SupportedContentTypes = {
+  type: 'Enum',
+} as const;
+
+export const $ImageContentDto = {
+  properties: {
+    src: {
+      type: 'string',
+      isRequired: true,
+    },
+    width: {
+      type: 'number',
+    },
+    height: {
+      type: 'number',
+    },
+    alt: {
+      type: 'string',
+      isRequired: true,
+    },
+    isBackground: {
+      type: 'boolean',
+    },
+  },
+} as const;
+
+export const $ImageUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'ImageContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $VideoContentDto = {
+  properties: {
+    sources: {
+      type: 'array',
+      contains: {
+        type: 'string',
+      },
+      isRequired: true,
+    },
+    type: {
+      type: 'string',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+    },
+    subtitle: {
+      type: 'string',
+    },
+    thumb: {
+      type: 'string',
+    },
+    title: {
+      type: 'string',
+    },
+    width: {
+      type: 'number',
+    },
+    height: {
+      type: 'number',
+    },
+  },
+} as const;
+
+export const $VideoUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'VideoContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $PdfContentDto = {
+  properties: {
+    url: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $PdfUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'PdfContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $WebpageContentDto = {
+  properties: {
+    url: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $WebpageUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'WebpageContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $Supported3DTypes = {
+  type: 'Enum',
+} as const;
+
+export const $ObjectContentDto = {
+  properties: {
+    url: {
+      type: 'string',
+      isRequired: true,
+    },
+    type: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'Supported3DTypes',
+        },
+      ],
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $ObjectContentDtoWrapper = {
+  properties: {
+    list: {
+      type: 'array',
+      contains: {
+        type: 'ObjectContentDto',
+      },
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $ObjectUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'ObjectContentDtoWrapper',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $TextContentDto = {
+  properties: {
+    text: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $TextUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'TextContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $QuizAnswerDto = {
+  properties: {
+    answerId: {
+      type: 'string',
+      isRequired: true,
+    },
+    answer: {
+      type: 'string',
+      isRequired: true,
+    },
+    reason: {
+      type: 'string',
+      isRequired: true,
+    },
+    correct: {
+      type: 'boolean',
+      isRequired: true,
+    },
+    answerImage: {
+      type: 'ImageContentDto',
+    },
+  },
+} as const;
+
+export const $QuizContentDto = {
+  properties: {
+    question: {
+      type: 'string',
+      isRequired: true,
+    },
+    answers: {
+      type: 'array',
+      contains: {
+        type: 'QuizAnswerDto',
+      },
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $QuizUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'QuizContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $ClearUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'dictionary',
+      contains: {
+        properties: {},
+      },
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $ClearScreenDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'dictionary',
+      contains: {
+        properties: {},
+      },
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $ButtonDto = {
+  properties: {
+    value: {
+      type: 'string',
+      description: `Button value`,
+      isRequired: true,
+    },
+    id: {
+      type: 'string',
+    },
+    label: {
+      type: 'string',
+      description: `Button label`,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the button`,
+    },
+    classes: {
+      type: 'array',
+      contains: {
+        type: 'string',
+      },
+    },
+    options: {
+      type: 'UIContentOptionsDto',
+    },
+  },
+} as const;
+
+export const $ButtonsContentDto = {
+  properties: {
+    label: {
+      type: 'string',
+      isRequired: true,
+    },
+    list: {
+      type: 'array',
+      contains: {
+        type: 'ButtonDto',
+      },
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $ButtonsUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'ButtonsContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $DialogueMessageUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'DialogueMessageDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $LinkContentDto = {
+  properties: {
+    url: {
+      type: 'string',
+      isRequired: true,
+    },
+    label: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $LinkUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'LinkContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $HtmlContentDto = {
+  properties: {
+    html: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $HtmlUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'HtmlContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $EmailContentDto = {
+  properties: {
+    email: {
+      type: 'string',
+      isRequired: true,
+    },
+    label: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $EmailUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'EmailContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $SupportedAudioTypes = {
+  type: 'Enum',
+} as const;
+
+export const $BackgroundAudioDto = {
+  properties: {
+    src: {
+      type: 'string',
+      isRequired: true,
+    },
+    type: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedAudioTypes',
+        },
+      ],
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $BackgroundUIAudioDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'BackgroundAudioDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $UiInteractionButtonDto = {
+  properties: {
+    context: {
+      type: 'dictionary',
+      contains: {
+        properties: {},
+      },
+      isRequired: true,
+    },
+    element: {
+      type: 'string',
+      isRequired: true,
+    },
+    value: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $NavigationMenuItemDto = {
+  properties: {
+    label: {
+      type: 'string',
+      isRequired: true,
+    },
+    id: {
+      type: 'string',
+      isRequired: true,
+    },
+    url: {
+      type: 'string',
+    },
+    group: {
+      type: 'string',
+    },
+    selected: {
+      type: 'boolean',
+    },
+    items: {
+      type: 'array',
+      contains: {
+        type: 'NavigationMenuItemDto',
+      },
+    },
+  },
+} as const;
+
+export const $NavigationMenuContentDto = {
+  properties: {
+    items: {
+      type: 'array',
+      contains: {
+        type: 'NavigationMenuItemDto',
+      },
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $NavigationMenuUIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'NavigationMenuContentDto',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $UIInteractionDTO = {
+  properties: {
+    context: {
+      type: 'dictionary',
+      contains: {
+        properties: {},
+      },
+      isRequired: true,
+    },
+    element: {
+      type: 'string',
+      isRequired: true,
+    },
+    value: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $UIContentDto = {
+  properties: {
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    clientId: {
+      type: 'string',
+      description: `Reference to the authenticated client the request originated from`,
+    },
+    requestId: {
+      type: 'string',
+      description: `Request identifier for monitoring purposes`,
+    },
+    userId: {
+      type: 'string',
+      description: `Reference to the user interacting with the system`,
+    },
+    ts: {
+      type: 'string',
+      description: `Reference date`,
+      format: 'date-time',
+    },
+    sessionId: {
+      type: 'string',
+      description: `Track the interaction session, if available`,
+    },
+    contentType: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'SupportedContentTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    content: {
+      type: 'dictionary',
+      contains: {
+        properties: {},
+      },
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      description: `Provide a description for the content`,
+    },
+    metadata: {
+      type: 'all-of',
+      description: `Provides metadata for the content`,
+      contains: [
+        {
+          type: 'UIContentMetadataDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    options: {
+      type: 'all-of',
+      description: `Provides configuration options for the content`,
+      contains: [
+        {
+          type: 'UIContentOptionsDto',
+        },
+        {
+          type: 'dictionary',
+          contains: {
+            properties: {},
+          },
+        },
+      ],
+    },
+    messageId: {
+      type: 'string',
+      description: `Unique sortable ID used to group and sort messages`,
+    },
+    chunkId: {
+      type: 'string',
+      description: `Unique sortable ID used to sort chunks from the same messageId`,
+    },
+    isWelcome: {
+      type: 'boolean',
+      description: `Specify if it is a welcome message`,
+    },
+  },
+} as const;
+
+export const $QrCodePayloadDto = {
+  properties: {
+    version: {
+      type: 'number',
+      isRequired: true,
+    },
+    data: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $QrCodeDto = {
+  properties: {
+    imageDataUrl: {
+      type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $UIModelMapBlendShapesRequestDto = {
+  properties: {
+    blendShapes: {
+      type: 'array',
+      contains: {
+        type: 'string',
+      },
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $UIModelMapBlendShapesResponseDto = {
+  properties: {
+    blendShapes: {
+      type: 'dictionary',
+      contains: {
+        properties: {},
+      },
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $UIAssetDto = {
+  properties: {
+    id: {
+      type: 'string',
+      isRequired: true,
+    },
+    type: {
+      type: 'all-of',
+      contains: [
+        {
+          type: 'RepositoryAssetTypes',
+        },
+      ],
+      isRequired: true,
+    },
+    name: {
+      type: 'string',
+    },
+    path: {
+      type: 'string',
+      isRequired: true,
+    },
+    metadata: {
+      type: 'RepositoryAssetMetadataDto',
+    },
+    filename: {
+      type: 'string',
+    },
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    userId: {
+      type: 'string',
+    },
+    ts: {
+      type: 'string',
+      format: 'date-time',
+    },
+  },
+} as const;
+
+export const $Buffer = {
+  properties: {},
 } as const;
 
 export const $SessionSearchFilter = {
@@ -2404,7 +4482,12 @@ export const $AgentHeartBeatEventDto = {
       isRequired: true,
     },
     status: {
-      type: 'AgentStatus',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'AgentStatus',
+        },
+      ],
       isRequired: true,
     },
     settings: {
@@ -2472,6 +4555,7 @@ export const $AgentEvaluatePromptDto = {
     sessionId: {
       type: 'string',
       description: `Id of the session`,
+      isRequired: true,
     },
     prompt: {
       type: 'string',
@@ -2488,7 +4572,13 @@ export const $AgentEvaluatePromptDto = {
       ],
     },
     provider: {
-      type: 'LLMProvider',
+      type: 'all-of',
+      description: `LLM provider`,
+      contains: [
+        {
+          type: 'LLMProvider',
+        },
+      ],
     },
     model: {
       type: 'string',
@@ -2509,1886 +4599,16 @@ export const $AgentEvaluatePromptResponseDto = {
       isRequired: true,
     },
     format: {
-      type: 'AgentEvaluatePromptFormat',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $UIContentMetadataDto = {
-  properties: {
-    repositoryId: {
-      type: 'string',
-      description: `Reference to a tool repository ID`,
-    },
-    chunks: {
-      type: 'array',
-      contains: {
-        type: 'dictionary',
-        contains: {
-          properties: {},
-        },
-      },
-    },
-  },
-} as const;
-
-export const $SupportedContentTypes = {
-  type: 'Enum',
-} as const;
-
-export const $ImageContentDto = {
-  properties: {
-    src: {
-      type: 'string',
-      isRequired: true,
-    },
-    width: {
-      type: 'number',
-    },
-    height: {
-      type: 'number',
-    },
-    alt: {
-      type: 'string',
-      isRequired: true,
-    },
-    isBackground: {
-      type: 'boolean',
-    },
-  },
-} as const;
-
-export const $ImageUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'ImageContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
       type: 'all-of',
-      description: `Provides metadata for the content`,
+      description: `Response format (text,string)`,
       contains: [
         {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
+          type: 'AgentEvaluatePromptFormat',
         },
       ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $VideoContentDto = {
-  properties: {
-    sources: {
-      type: 'array',
-      contains: {
-        type: 'string',
-      },
-      isRequired: true,
-    },
-    type: {
-      type: 'string',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-    },
-    subtitle: {
-      type: 'string',
-    },
-    thumb: {
-      type: 'string',
-    },
-    title: {
-      type: 'string',
-    },
-    width: {
-      type: 'number',
-    },
-    height: {
-      type: 'number',
-    },
-  },
-} as const;
-
-export const $VideoUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'VideoContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $PdfContentDto = {
-  properties: {
-    url: {
-      type: 'string',
       isRequired: true,
     },
   },
-} as const;
-
-export const $PdfUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'PdfContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $WebpageContentDto = {
-  properties: {
-    url: {
-      type: 'string',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $WebpageUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'WebpageContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $Supported3DTypes = {
-  type: 'Enum',
-} as const;
-
-export const $ObjectContentDto = {
-  properties: {
-    url: {
-      type: 'string',
-      isRequired: true,
-    },
-    type: {
-      type: 'Supported3DTypes',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $ObjectContentDtoWrapper = {
-  properties: {
-    list: {
-      type: 'array',
-      contains: {
-        type: 'ObjectContentDto',
-      },
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $ObjectUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'ObjectContentDtoWrapper',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $TextContentDto = {
-  properties: {
-    text: {
-      type: 'string',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $TextUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'TextContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $QuizAnswerDto = {
-  properties: {
-    answerId: {
-      type: 'string',
-      isRequired: true,
-    },
-    answer: {
-      type: 'string',
-      isRequired: true,
-    },
-    reason: {
-      type: 'string',
-      isRequired: true,
-    },
-    correct: {
-      type: 'boolean',
-      isRequired: true,
-    },
-    answerImage: {
-      type: 'ImageContentDto',
-    },
-  },
-} as const;
-
-export const $QuizContentDto = {
-  properties: {
-    question: {
-      type: 'string',
-      isRequired: true,
-    },
-    answers: {
-      type: 'array',
-      contains: {
-        type: 'QuizAnswerDto',
-      },
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $QuizUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'QuizContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $ClearUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'dictionary',
-      contains: {
-        properties: {},
-      },
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $ClearScreenDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'dictionary',
-      contains: {
-        properties: {},
-      },
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $ButtonDto = {
-  properties: {
-    value: {
-      type: 'string',
-      description: `Button value`,
-      isRequired: true,
-    },
-    id: {
-      type: 'string',
-    },
-    label: {
-      type: 'string',
-      description: `Button label`,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the button`,
-    },
-    classes: {
-      type: 'array',
-      contains: {
-        type: 'string',
-      },
-    },
-    options: {
-      type: 'UIContentOptionsDto',
-    },
-  },
-} as const;
-
-export const $ButtonsContentDto = {
-  properties: {
-    label: {
-      type: 'string',
-      isRequired: true,
-    },
-    list: {
-      type: 'array',
-      contains: {
-        type: 'ButtonDto',
-      },
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $ButtonsUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'ButtonsContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $DialogueMessageUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'DialogueMessageDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $LinkContentDto = {
-  properties: {
-    url: {
-      type: 'string',
-      isRequired: true,
-    },
-    label: {
-      type: 'string',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $LinkUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'LinkContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $HtmlContentDto = {
-  properties: {
-    html: {
-      type: 'string',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $HtmlUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'HtmlContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $EmailContentDto = {
-  properties: {
-    email: {
-      type: 'string',
-      isRequired: true,
-    },
-    label: {
-      type: 'string',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $EmailUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'EmailContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $SupportedAudioTypes = {
-  type: 'Enum',
-} as const;
-
-export const $BackgroundAudioDto = {
-  properties: {
-    src: {
-      type: 'string',
-      isRequired: true,
-    },
-    type: {
-      type: 'SupportedAudioTypes',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $BackgroundUIAudioDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'BackgroundAudioDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $UiInteractionButtonDto = {
-  properties: {
-    context: {
-      type: 'dictionary',
-      contains: {
-        properties: {},
-      },
-      isRequired: true,
-    },
-    element: {
-      type: 'string',
-      isRequired: true,
-    },
-    value: {
-      type: 'string',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $NavigationMenuItemDto = {
-  properties: {
-    label: {
-      type: 'string',
-      isRequired: true,
-    },
-    id: {
-      type: 'string',
-      isRequired: true,
-    },
-    url: {
-      type: 'string',
-    },
-    group: {
-      type: 'string',
-    },
-    selected: {
-      type: 'boolean',
-    },
-    items: {
-      type: 'array',
-      contains: {
-        type: 'NavigationMenuItemDto',
-      },
-    },
-  },
-} as const;
-
-export const $NavigationMenuContentDto = {
-  properties: {
-    items: {
-      type: 'array',
-      contains: {
-        type: 'NavigationMenuItemDto',
-      },
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $NavigationMenuUIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'NavigationMenuContentDto',
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $UIInteractionDTO = {
-  properties: {
-    context: {
-      type: 'dictionary',
-      contains: {
-        properties: {},
-      },
-      isRequired: true,
-    },
-    element: {
-      type: 'string',
-      isRequired: true,
-    },
-    value: {
-      type: 'string',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $UIContentDto = {
-  properties: {
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    clientId: {
-      type: 'string',
-      description: `Reference to the authenticated client the request originated from`,
-    },
-    requestId: {
-      type: 'string',
-      description: `Request identifier for monitoring purposes`,
-    },
-    userId: {
-      type: 'string',
-      description: `Reference to the user interacting with the system`,
-    },
-    ts: {
-      type: 'string',
-      description: `Reference date`,
-      format: 'date-time',
-    },
-    sessionId: {
-      type: 'string',
-      description: `Track the interaction session, if available`,
-    },
-    contentType: {
-      type: 'SupportedContentTypes',
-      isRequired: true,
-    },
-    content: {
-      type: 'dictionary',
-      contains: {
-        properties: {},
-      },
-      isRequired: true,
-    },
-    description: {
-      type: 'string',
-      description: `Provide a description for the content`,
-    },
-    metadata: {
-      type: 'all-of',
-      description: `Provides metadata for the content`,
-      contains: [
-        {
-          type: 'UIContentMetadataDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    options: {
-      type: 'all-of',
-      description: `Provides configuration options for the content`,
-      contains: [
-        {
-          type: 'UIContentOptionsDto',
-        },
-        {
-          type: 'dictionary',
-          contains: {
-            properties: {},
-          },
-        },
-      ],
-    },
-    messageId: {
-      type: 'string',
-      description: `Unique sortable ID used to group and sort messages`,
-    },
-    chunkId: {
-      type: 'string',
-      description: `Unique sortable ID used to sort chunks from the same messageId`,
-    },
-    isWelcome: {
-      type: 'boolean',
-      description: `Specify if it is a welcome message`,
-    },
-  },
-} as const;
-
-export const $QrCodePayloadDto = {
-  properties: {
-    version: {
-      type: 'number',
-      isRequired: true,
-    },
-    data: {
-      type: 'string',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $QrCodeDto = {
-  properties: {
-    imageDataUrl: {
-      type: 'string',
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $UIModelMapBlendShapesRequestDto = {
-  properties: {
-    blendShapes: {
-      type: 'array',
-      contains: {
-        type: 'string',
-      },
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $UIModelMapBlendShapesResponseDto = {
-  properties: {
-    blendShapes: {
-      type: 'dictionary',
-      contains: {
-        properties: {},
-      },
-      isRequired: true,
-    },
-  },
-} as const;
-
-export const $UIAssetDto = {
-  properties: {
-    id: {
-      type: 'string',
-      isRequired: true,
-    },
-    type: {
-      type: 'RepositoryAssetTypes',
-      isRequired: true,
-    },
-    name: {
-      type: 'string',
-    },
-    path: {
-      type: 'string',
-      isRequired: true,
-    },
-    metadata: {
-      type: 'RepositoryAssetMetadataDto',
-    },
-    filename: {
-      type: 'string',
-    },
-    appId: {
-      type: 'string',
-      isRequired: true,
-    },
-    userId: {
-      type: 'string',
-    },
-    ts: {
-      type: 'string',
-      format: 'date-time',
-    },
-  },
-} as const;
-
-export const $Buffer = {
-  properties: {},
 } as const;
 
 export const $LogType = {
@@ -4406,7 +4626,12 @@ export const $DatasetRecordDto = {
       isRequired: true,
     },
     type: {
-      type: 'LogType',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'LogType',
+        },
+      ],
     },
     label: {
       type: 'string',
@@ -4458,6 +4683,7 @@ export const $DatasetRecordFilterDto = {
     sessionId: {
       type: 'string',
       description: `Track the interaction session, if available`,
+      isRequired: true,
     },
     types: {
       type: 'array',
@@ -4479,7 +4705,12 @@ export const $MonitoringRecordDto = {
       isRequired: true,
     },
     type: {
-      type: 'LogType',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'LogType',
+        },
+      ],
     },
     label: {
       type: 'string',
@@ -4502,7 +4733,12 @@ export const $AdvancedDatasetRecordFilterDto = {
       type: 'string',
     },
     type: {
-      type: 'LogType',
+      type: 'all-of',
+      contains: [
+        {
+          type: 'LogType',
+        },
+      ],
     },
     label: {
       type: 'string',
@@ -4847,6 +5083,55 @@ export const $StatusEventDto = {
     },
     robotId: {
       type: 'string',
+      isRequired: true,
+    },
+  },
+} as const;
+
+export const $SpaceOptionsDto = {
+  properties: {},
+} as const;
+
+export const $NavigationSpaceDto = {
+  properties: {
+    spaceId: {
+      type: 'string',
+      isRequired: true,
+    },
+    name: {
+      type: 'string',
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+      isRequired: true,
+    },
+    group: {
+      type: 'string',
+      isRequired: true,
+    },
+    appId: {
+      type: 'string',
+      isRequired: true,
+    },
+    origin: {
+      type: 'PoseDto',
+      isRequired: true,
+    },
+    options: {
+      type: 'SpaceOptionsDto',
+      isRequired: true,
+    },
+    map: {
+      type: 'string',
+      description: `Reference to a map image as background reference`,
+      isRequired: true,
+    },
+    areas: {
+      type: 'array',
+      contains: {
+        type: 'string',
+      },
       isRequired: true,
     },
   },

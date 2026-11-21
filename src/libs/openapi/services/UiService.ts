@@ -2,8 +2,7 @@ import type {
   Buffer,
   QrCodeDto,
   QrCodePayloadDto,
-  RepositoryAssetMetadataDto,
-  RepositoryAssetTypes,
+  UIAssetDto,
   UIContentDto,
   UIInteractionDTO,
   UIModelMapBlendShapesRequestDto,
@@ -32,30 +31,12 @@ export type TDataGetAsset = {
   type: string;
 };
 export type TDataSaveAsset = {
-  formData: {
-    id?: string;
-    type?: RepositoryAssetTypes;
-    name?: string;
-    path?: string;
-    metadata?: RepositoryAssetMetadataDto;
-    filename?: string;
-    appId?: string;
-    userId?: string;
-    ts?: string;
+  formData: UIAssetDto & {
     file?: Blob | File;
   };
 };
 export type TDataAdminSaveAsset = {
-  formData: {
-    id?: string;
-    type?: RepositoryAssetTypes;
-    name?: string;
-    path?: string;
-    metadata?: RepositoryAssetMetadataDto;
-    filename?: string;
-    appId?: string;
-    userId?: string;
-    ts?: string;
+  formData: UIAssetDto & {
     file?: Blob | File;
   };
 };

@@ -1,12 +1,10 @@
 import type {
-  DialogueActor,
   DialogueDocumentDto,
   DialogueMemoryMessageDto,
   DialogueMessageDto,
   DialogueTaskRecordDto,
   DialogueTextToSpeechDto,
   DialogueToolsRepositoryDto,
-  RagWebsiteDto,
 } from '../models';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
@@ -20,12 +18,6 @@ export type TDataImport = {
    */
   requestBody: Array<DialogueDocumentDto>;
 };
-export type TDataImportWebsite = {
-  /**
-   * URL
-   */
-  requestBody: RagWebsiteDto;
-};
 export type TDataRemoveAll = {
   appId: string;
 };
@@ -38,69 +30,7 @@ export type TDataSpeak = {
 };
 export type TDataText = {
   appId: string;
-  formData: {
-    appId?: string;
-    /**
-     * Reference to the authenticated client the request originated from
-     */
-    clientId?: string;
-    /**
-     * Request identifier for monitoring purposes
-     */
-    requestId?: string;
-    /**
-     * Reference to the user interacting with the system
-     */
-    userId?: string;
-    /**
-     * Reference date
-     */
-    ts?: string;
-    /**
-     * User session identifier
-     */
-    sessionId?: string;
-    actor?: DialogueActor;
-    /**
-     * Indicate a chunck identifier as timestamp, usually indicating it is part of a stream.
-     */
-    text?: string;
-    /**
-     * Assistant gender (M or F)
-     */
-    gender?: string;
-    /**
-     * Text language
-     */
-    language?: string;
-    /**
-     * User emotion, if available
-     */
-    emotion?: string;
-    /**
-     * LLM engine to use
-     */
-    llm?: Record<string, unknown>;
-    /**
-     * The avatar id used for interaction
-     */
-    avatar?: string;
-    /**
-     * Unique sortable ID used to group and sort messages
-     */
-    messageId?: string;
-    /**
-     * Unique sortable ID used to sort chunks from the same messageId
-     */
-    chunkId?: string;
-    /**
-     * Toggle TTS rendering for this message
-     */
-    ttsEnabled?: boolean;
-    /**
-     * Specify if it is a welcome message
-     */
-    isWelcome?: boolean;
+  formData: DialogueMessageDto & {
     file?: Blob | File;
   };
   sampleRate: number;
@@ -163,21 +93,6 @@ export class DialogueService {
     return this.httpRequest.request({
       method: 'POST',
       url: '/api/dialogue/document',
-      body: requestBody,
-      mediaType: 'application/json',
-    });
-  }
-
-  /**
-   * Import RAG documents by website scraping
-   * @returns any
-   * @throws ApiError
-   */
-  public importWebsite(data: TDataImportWebsite): CancelablePromise<any> {
-    const { requestBody } = data;
-    return this.httpRequest.request({
-      method: 'POST',
-      url: '/api/dialogue/document/website',
       body: requestBody,
       mediaType: 'application/json',
     });

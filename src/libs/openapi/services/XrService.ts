@@ -69,7 +69,7 @@ export class XrService {
       method: 'DELETE',
       url: '/api/xr/marker/{markerId}',
       path: {
-        ':markerId': markerId,
+        markerId,
       },
     });
   }
@@ -87,7 +87,7 @@ export class XrService {
       method: 'GET',
       url: '/api/xr/marker/{markerId}',
       path: {
-        ':markerId': markerId,
+        markerId,
       },
     });
   }

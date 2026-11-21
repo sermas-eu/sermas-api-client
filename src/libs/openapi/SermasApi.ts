@@ -8,9 +8,11 @@ import { AuthenticationService } from './services/AuthenticationService';
 import { DetectionService } from './services/DetectionService';
 import { DialogueService } from './services/DialogueService';
 import { PlatformService } from './services/PlatformService';
+import { PlatformModuleProxyService } from './services/PlatformModuleProxyService';
 import { RoboticsService } from './services/RoboticsService';
 import { SessionService } from './services/SessionService';
 import { UiService } from './services/UiService';
+import { UiPrivacyService } from './services/UiPrivacyService';
 import { XrService } from './services/XrService';
 
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
@@ -21,9 +23,11 @@ export class SermasApi {
   public readonly detection: DetectionService;
   public readonly dialogue: DialogueService;
   public readonly platform: PlatformService;
+  public readonly platformModuleProxy: PlatformModuleProxyService;
   public readonly robotics: RoboticsService;
   public readonly session: SessionService;
   public readonly ui: UiService;
+  public readonly uiPrivacy: UiPrivacyService;
   public readonly xr: XrService;
 
   public readonly request: BaseHttpRequest;
@@ -53,9 +57,11 @@ export class SermasApi {
     this.detection = new DetectionService(this.request);
     this.dialogue = new DialogueService(this.request);
     this.platform = new PlatformService(this.request);
+    this.platformModuleProxy = new PlatformModuleProxyService(this.request);
     this.robotics = new RoboticsService(this.request);
     this.session = new SessionService(this.request);
     this.ui = new UiService(this.request);
+    this.uiPrivacy = new UiPrivacyService(this.request);
     this.xr = new XrService(this.request);
   }
 }
