@@ -2,14 +2,14 @@
 
 import { Broker } from '../broker';
 
-import {
+import type {
   AgentDto,
   AgentChangedDto,
   SessionChangedDto,
   SessionStorageEventDto,
   SessionSupportEventDto,
 } from './models';
-import { SessionDto } from '../openapi/models';
+import type { SessionDto } from '../openapi/models';
 
 export class Session {
   constructor(private readonly broker: Broker) {}

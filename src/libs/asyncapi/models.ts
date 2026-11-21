@@ -1,5 +1,5 @@
 // generated, do not edit
-import {
+import type {
   PlatformModuleConfigDto,
   ModuleSettingsDto,
   ModuleResourceDto,

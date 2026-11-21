@@ -1,4 +1,4 @@
-import { LogLevel, LoggerService } from './logger.dto';
+import type { LogLevel, LoggerService } from './logger.dto';
 
 let defaultLogger: LoggerService;
 

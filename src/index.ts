@@ -2,8 +2,12 @@ import { jwtDecode } from 'jwt-decode';
 import AsyncApiClient from './libs/asyncapi';
 import { Broker } from './libs/broker';
 import { Logger, setDefaultLogger } from './libs/logger';
-import { LoggerService } from './libs/logger.dto';
-import { LoginResponseDto, SermasApi, type AuthJwtUser } from './libs/openapi';
+import type { LoggerService } from './libs/logger.dto';
+import {
+  SermasApi,
+  type AuthJwtUser,
+  type LoginResponseDto,
+} from './libs/openapi';
 
 export { Logger, type LoggerService };
 

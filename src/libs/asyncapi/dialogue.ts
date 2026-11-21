@@ -2,7 +2,7 @@
 
 import { Broker } from '../broker';
 
-import {
+import type {
   DialogueProgressEventDto,
   DialogueAvatarSpeechControlDto,
   DialogueSpeechToTextDto,
@@ -15,7 +15,7 @@ import {
   DialogueTaskRecordChangedDto,
   DialogueTaskRecordHandlerDto,
 } from './models';
-import { DialogueMessageDto, Buffer } from '../openapi/models';
+import type { DialogueMessageDto, Buffer } from '../openapi/models';
 
 export class Dialogue {
   constructor(private readonly broker: Broker) {}

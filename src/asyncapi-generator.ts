@@ -77,7 +77,7 @@ const generateModels = async (raw: any) => {
 
   models = [
     '// generated, do not edit',
-    `import { ${openapiImports.join(',')} } from '../openapi'`,
+    `import type { ${openapiImports.join(',')} } from '../openapi'`,
     // `export { ${openapiImports.join(',')} }`,
     models,
   ].join('\n');
@@ -207,8 +207,8 @@ const generateClient = async (
 
         import { Broker } from '../broker'
         
-        ${asyncModels.length ? `import { ${asyncModels.join(', ')} } from './models'` : ''}
-        ${apiModels.length ? `import { ${apiModels.join(', ')} } from '../openapi/models'` : ''}
+        ${asyncModels.length ? `import type { ${asyncModels.join(', ')} } from './models'` : ''}
+        ${apiModels.length ? `import type { ${apiModels.join(', ')} } from '../openapi/models'` : ''}
 
         export class ${className} {
 

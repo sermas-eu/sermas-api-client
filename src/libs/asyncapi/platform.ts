@@ -2,13 +2,13 @@
 
 import { Broker } from '../broker';
 
-import {
+import type {
   PlatformAppChangedDto,
   PlatformAppClientChangedDto,
   PlatformTokenDto,
   PlatformAppModuleConfigEventDto,
 } from './models';
-import { MonitoringRecordDto } from '../openapi/models';
+import type { MonitoringRecordDto } from '../openapi/models';
 
 export class Platform {
   constructor(private readonly broker: Broker) {}

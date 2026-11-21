@@ -2,7 +2,7 @@
 
 import { Broker } from '../broker';
 
-import { ModuleConfigEventDto } from './models';
+import type { ModuleConfigEventDto } from './models';
 
 export class Module {
   constructor(private readonly broker: Broker) {}

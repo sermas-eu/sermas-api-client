@@ -2,8 +2,8 @@
 
 import { Broker } from '../broker';
 
-import { XRMarkerChangedDto, XROcclusionDto } from './models';
-import { XRMarkerDto } from '../openapi/models';
+import type { XRMarkerChangedDto, XROcclusionDto } from './models';
+import type { XRMarkerDto } from '../openapi/models';
 
 export class Xr {
   constructor(private readonly broker: Broker) {}
