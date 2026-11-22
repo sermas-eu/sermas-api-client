@@ -2,8 +2,8 @@
 
 import { Broker } from '../broker';
 
-import { InitialPoseEventDto, OperationalStateEventDto } from './models';
-import {
+import type { InitialPoseEventDto, OperationalStateEventDto } from './models';
+import type {
   ActuationEventDto,
   MovementEventDto,
   StatusEventDto,

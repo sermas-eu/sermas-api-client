@@ -4,7 +4,7 @@ import { Logger } from './logger';
 export class Broker {
   private readonly logger = new Logger(Broker.name);
 
-  private client: MqttClient;
+  private client?: MqttClient;
   private subscriptions: {
     topic: string;
     type: string;
@@ -18,7 +18,7 @@ export class Broker {
   constructor(
     private readonly config: {
       url: string;
-      username: string;
+      username?: string;
       password: string;
       params: Record<string, any>;
     },
@@ -85,7 +85,7 @@ export class Broker {
       try {
         for (const sub of this.subscriptions) {
           this.logger.debug(`SUB ${sub.topic}`);
-          await this.client.subscribeAsync(sub.topic);
+          await this.client?.subscribeAsync(sub.topic);
         }
       } catch (e: any) {
         this.logger.warn(`Subscription failed: ${e.stack}`);
@@ -192,7 +192,7 @@ export class Broker {
       const sub = this.subscriptions[index];
       this.subscriptions.splice(index, 1);
       try {
-        this.client.unsubscribe(sub.topic, sub.callback);
+        this.client?.unsubscribe(sub.topic, sub.callback);
       } catch {}
     };
   }
@@ -214,6 +214,8 @@ export class Broker {
         ...(!isBuffer ? ev : {}),
         ...(params || {}),
       });
+      // no client yet: not published, as when publishing fails
+      if (!this.client) return false;
       await this.client.publishAsync(topic, payload);
     } catch {
       return false;

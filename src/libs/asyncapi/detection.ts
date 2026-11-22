@@ -2,7 +2,7 @@
 
 import { Broker } from '../broker';
 
-import {
+import type {
   UserDetectionEventDto,
   UserCharacterizationEventDto,
   AudioClassificationEventDto,
@@ -10,7 +10,7 @@ import {
   QRCodeEventDto,
   NoiseEventDto,
 } from './models';
-import { UserInteractionIntentionDto } from '../openapi/models';
+import type { UserInteractionIntentionDto } from '../openapi/models';
 
 export class Detection {
   constructor(private readonly broker: Broker) {}

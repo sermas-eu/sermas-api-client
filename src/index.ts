@@ -2,8 +2,12 @@ import { jwtDecode } from 'jwt-decode';
 import AsyncApiClient from './libs/asyncapi';
 import { Broker } from './libs/broker';
 import { Logger, setDefaultLogger } from './libs/logger';
-import { LoggerService } from './libs/logger.dto';
-import { LoginResponseDto, SermasApi, type AuthJwtUser } from './libs/openapi';
+import type { LoggerService } from './libs/logger.dto';
+import {
+  SermasApi,
+  type AuthJwtUser,
+  type LoginResponseDto,
+} from './libs/openapi';
 
 export { Logger, type LoggerService };
 
@@ -44,11 +48,11 @@ export class SermasApiClient {
   private apiUrl: string;
   private mqttUrl: string;
 
-  private refreshTimeout: NodeJS.Timeout;
+  private refreshTimeout?: ReturnType<typeof setTimeout>;
 
   private ready = false;
 
-  private jwt: AuthJwtUser;
+  private jwt?: AuthJwtUser;
 
   private params: Record<string, any> = {};
 
@@ -109,6 +113,7 @@ export class SermasApiClient {
   }
 
   private watchToken() {
+    if (!this.config.access_token) return;
     const jwt = jwtDecode<AuthJwtUser>(this.config.access_token);
     this.jwt = jwt;
 
@@ -128,18 +133,23 @@ export class SermasApiClient {
 
   async refreshToken() {
     this.logger.verbose(`Refreshing token`);
+    const { refresh_token, appId, clientId, clientSecret } = this.config;
+    if (!refresh_token || !appId || !clientId) {
+      this.logger.warn(`Cannot refresh token: refresh token, appId or clientId missing`);
+      return;
+    }
     let res;
     try {
       res = await this.api.platform.getClientRefreshToken({
         requestBody: {
-          refreshToken: this.config.refresh_token,
-          appId: this.config.appId,
-          clientId: this.config.clientId,
-          clientSecret: this.config.clientSecret,
+          refreshToken: refresh_token,
+          appId,
+          clientId,
+          clientSecret,
         },
       });
-    } catch (e) {
-      this.logger.error(`Refresh token failed: ${e.stack}`);
+    } catch (e: any) {
+      this.logger.error(`Refresh token failed: ${e?.stack}`);
       return;
     }
 
@@ -155,12 +165,13 @@ export class SermasApiClient {
     return res;
   }
 
-  async loadToken(clientId, clientSecret, appId?: string) {
+  async loadToken(clientId: string, clientSecret: string, appId?: string) {
     const client = new SermasApi({
       BASE: this.apiUrl,
     });
 
     this.config.appId = appId || this.config.appId;
+    if (!this.config.appId) throw new Error('appId is required');
 
     const res = await client.platform.getClientAccessToken({
       requestBody: {
@@ -201,7 +212,7 @@ export class SermasApiClient {
     this.init(true);
   }
 
-  async login(username, password, appId?: string) {
+  async login(username: string, password: string, appId?: string) {
     const client = new SermasApi({
       BASE: this.apiUrl,
     });
@@ -212,7 +223,8 @@ export class SermasApiClient {
       requestBody: {
         username,
         password,
-        appId: this.config.appId,
+        // optional for the API (platform login); the generated type marks it required
+        appId: this.config.appId as string,
       },
     });
 

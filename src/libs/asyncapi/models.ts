@@ -1,14 +1,12 @@
 // generated, do not edit
-import {
-  PlatformAppDto,
-  AppModuleConfigDto,
+import type {
+  PlatformModuleConfigDto,
   ModuleSettingsDto,
   ModuleResourceDto,
+  PlatformAppDto,
+  AppModuleConfigDto,
   RepositoryConfigDto,
   RepositoryAvatarDto,
-  RepositoryAssetTypes,
-  ModelType,
-  ModelGender,
   AvatarCameraConfig,
   Point3D,
   AvatarTTSOptions,
@@ -20,36 +18,25 @@ import {
   RepositoryAnimationDto,
   AppClientDto,
   AppSettingsDto,
-  InteractionStartTypes,
   AppToolsDTO,
   ToolsParameterSchema,
-  ToolsParameterSchemaTypes,
   DialogueTaskDto,
   TaskIntentDto,
   TaskEventDto,
-  TaskEventType,
   TaskEventTriggerDto,
   TaskFieldDto,
-  TaskSchemaDataType,
   OptionSelection,
-  PlatformModuleConfigDto,
   PositionDto,
   UserInteractionIntentionDto,
-  DialogueMessageDto,
-  DialogueActor,
-  Buffer,
-  DialogueTaskRecordDto,
-  SessionDto,
-  SessionProperties,
-  SessionStorageRecordDto,
-  AgentStatus,
   UIAssetDto,
   UIContentDto,
-  SupportedContentTypes,
   UIInteractionDTO,
+  SessionDto,
+  SessionProperties,
+  DialogueMessageDto,
+  Buffer,
+  DialogueTaskRecordDto,
   MonitoringRecordDto,
-  LogType,
-  XRMarkerDto,
   ActuationEventDto,
   ActuationDto,
   MovementEventDto,
@@ -59,14 +46,14 @@ import {
   StatusEventDto,
   StatusDto,
   VelocityDto,
+  SessionStorageRecordDto,
+  XRMarkerDto,
 } from '../openapi';
 
-export interface PlatformTokenDto {
-  appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
+export interface ModuleConfigEventDto {
+  operation: string;
+  ts: string;
+  record: PlatformModuleConfigDto;
 }
 
 export interface PlatformAppChangedDto {
@@ -80,25 +67,81 @@ export interface PlatformAppChangedDto {
   record: PlatformAppDto;
 }
 
-export interface anonymous_schema_88 {
+export type anonymous_schema_46 =
+  | 'avatars'
+  | 'backgrounds'
+  | 'robots'
+  | 'documents'
+  | 'animations';
+
+export type anonymous_schema_49 = 'readyplayerme' | 'custom';
+
+export type anonymous_schema_50 = 'M' | 'F';
+
+export type anonymous_schema_59 =
+  | 'avatars'
+  | 'backgrounds'
+  | 'robots'
+  | 'documents'
+  | 'animations';
+
+export type anonymous_schema_65 =
+  | 'avatars'
+  | 'backgrounds'
+  | 'robots'
+  | 'documents'
+  | 'animations';
+
+export type anonymous_schema_76 =
+  | 'avatars'
+  | 'backgrounds'
+  | 'robots'
+  | 'documents'
+  | 'animations';
+
+export type anonymous_schema_81 =
+  | 'avatars'
+  | 'backgrounds'
+  | 'robots'
+  | 'documents'
+  | 'animations';
+
+export interface anonymous_schema_97 {
+  chat?: string;
+  tools?: string;
+  sentiment?: string;
+  tasks?: string;
+  intent?: string;
+  translation?: string;
+}
+
+export interface anonymous_schema_105 {
   text: string;
 }
 
-export interface anonymous_schema_108 {
+export type anonymous_schema_108 =
+  | 'on-load'
+  | 'touch'
+  | 'speak'
+  | 'intent-detection';
+
+export type anonymous_schema_120 = 'string' | 'number' | 'boolean' | 'object';
+
+export interface anonymous_schema_127 {
   auth?: string;
-  basic?: anonymous_schema_110;
-  bearer?: anonymous_schema_113;
+  basic?: anonymous_schema_129;
+  bearer?: anonymous_schema_132;
   moduleId: string;
   url: string;
   headers?: Record<string, any>;
 }
 
-export interface anonymous_schema_110 {
+export interface anonymous_schema_129 {
   username?: string;
   password: string;
 }
 
-export interface anonymous_schema_113 {
+export interface anonymous_schema_132 {
   clientType?: string;
   clientId?: string;
   clientSecret?: string;
@@ -109,25 +152,46 @@ export interface anonymous_schema_113 {
   refreshUrl?: string;
 }
 
-export interface anonymous_schema_153 {
+export interface anonymous_schema_144 {
+  contentType: string;
+  content: Record<string, any>;
+  description?: string;
+  options?: Record<string, any>;
+}
+
+export type anonymous_schema_164 =
+  | 'started'
+  | 'completed'
+  | 'ongoing'
+  | 'aborted';
+
+export interface anonymous_schema_177 {
   clearScreen?: boolean;
   ttsEnabled?: boolean;
   stopSpeech?: boolean;
   language?: string;
 }
 
-export interface anonymous_schema_170 {
+export type anonymous_schema_183 =
+  | 'text'
+  | 'boolean'
+  | 'date'
+  | 'select'
+  | 'eval'
+  | 'external';
+
+export interface anonymous_schema_195 {
   triggerOnce?: boolean;
   removeRecord?: boolean;
   enableTool?: boolean;
-  toolOptions?: anonymous_schema_174;
+  toolOptions?: anonymous_schema_199;
   repositoryId?: string;
   list?: boolean;
   oncePerSession?: boolean;
   matchOrRemove?: boolean;
 }
 
-export interface anonymous_schema_174 {
+export interface anonymous_schema_199 {
   triggerOnce?: boolean;
   exclusive?: boolean;
 }
@@ -143,30 +207,13 @@ export interface PlatformAppClientChangedDto {
   record: AppClientDto;
 }
 
-export interface PlatformAppModuleConfigEventDto {
-  appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
-  operation: string;
-  sessionId?: string;
-  record: AppModuleConfigDto;
-}
-
 export interface UpdateUserEventDto {
   appId: string;
   clientId?: string;
   requestId?: string;
-  userId?: string;
+  userId: string;
   ts?: string;
   enabled: boolean;
-}
-
-export interface ModuleConfigEventDto {
-  operation: Record<string, any>;
-  ts: string;
-  record: PlatformModuleConfigDto;
 }
 
 export interface UserDetectionEventDto {
@@ -201,7 +248,7 @@ export interface StringInferenceValue {
   value: string;
 }
 
-export type anonymous_schema_241 = 'start' | 'stop';
+export type anonymous_schema_249 = 'start' | 'stop';
 
 export interface UserCharacterizationEventDto {
   appId: string;
@@ -283,9 +330,134 @@ export interface NoiseEventDto {
   speakerId: string[];
 }
 
+export interface UIAssetChangedDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  operation: string;
+  sessionId?: string;
+  record: UIAssetDto;
+}
+
+export type anonymous_schema_307 =
+  | 'avatars'
+  | 'backgrounds'
+  | 'robots'
+  | 'documents'
+  | 'animations';
+
+export type anonymous_schema_320 =
+  | 'video'
+  | 'image'
+  | 'pdf'
+  | 'webpage'
+  | 'object'
+  | 'text'
+  | 'email'
+  | 'html'
+  | 'link'
+  | 'dialogue-message'
+  | 'navigation'
+  | 'navigation-menu'
+  | 'buttons'
+  | 'quiz'
+  | 'clear-screen'
+  | 'qrcode-scanner'
+  | 'background-audio';
+
+export interface anonymous_schema_323 {
+  repositoryId?: string;
+  chunks?: Record<string, any>[];
+  additionalProperties?: Record<string, any>;
+}
+
+export interface anonymous_schema_328 {
+  clearScreen?: boolean;
+  ttsEnabled?: boolean;
+  stopSpeech?: boolean;
+  language?: string;
+  additionalProperties?: Record<string, any>;
+}
+
+export interface UIInteractionEventDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  sessionId?: string;
+  moduleId: string;
+  interaction: UIInteractionDTO;
+}
+
+export interface AgentDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  agentId: string;
+  status: anonymous_schema_349;
+  modules: string[];
+}
+
+export type anonymous_schema_349 =
+  | 'unavailable'
+  | 'error'
+  | 'not_ready'
+  | 'ready'
+  | 'loading'
+  | 'interacting'
+  | 'waiting'
+  | 'processing';
+
+export interface AgentChangedDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  operation: string;
+  sessionId?: string;
+  moduleId: string;
+  record: AgentDto;
+  settings?: AppSettingsDto;
+}
+
+export interface SessionChangedDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  operation: string;
+  sessionId?: string;
+  record: SessionDto;
+}
+
 export interface DialogueProgressEventDto {
-  event: Record<string, any>;
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  sessionId?: string;
+  event: string;
   status?: string;
+  error?: string;
+}
+
+export type anonymous_schema_395 = 'user' | 'agent';
+
+export interface anonymous_schema_400 {
+  chat?: string;
+  tools?: string;
+  sentiment?: string;
+  tasks?: string;
+  intent?: string;
+  translation?: string;
 }
 
 export interface DialogueAvatarSpeechControlDto {
@@ -305,17 +477,28 @@ export interface DialogueSpeechToTextDto {
   userId?: string;
   ts?: string;
   sessionId?: string;
-  actor?: DialogueActor;
+  actor?: anonymous_schema_419;
   text: string;
   gender?: string;
   language?: string;
   emotion?: string;
-  llm?: Record<string, any>;
+  llm?: anonymous_schema_424;
   avatar?: string;
   messageId?: string;
   chunkId?: string;
   ttsEnabled?: boolean;
   isWelcome?: boolean;
+}
+
+export type anonymous_schema_419 = 'user' | 'agent';
+
+export interface anonymous_schema_424 {
+  chat?: string;
+  tools?: string;
+  sentiment?: string;
+  tasks?: string;
+  intent?: string;
+  translation?: string;
 }
 
 export interface DialogueSessionRequestDto {
@@ -325,96 +508,14 @@ export interface DialogueSessionRequestDto {
   userId?: string;
   ts?: string;
   sessionId?: string;
-  status: DialogueSessionRequestStatus;
+  status: anonymous_schema_436;
 }
 
-export type DialogueSessionRequestStatus =
+export type anonymous_schema_436 =
   | 'started'
   | 'processing'
   | 'ended'
   | 'cancelled';
-
-export interface DialogueTaskChangedDto {
-  appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
-  operation: string;
-  sessionId?: string;
-  record: DialogueTaskDto;
-}
-
-export interface DialogueTaskProgressDto {
-  type: TaskEventType;
-  task: anonymous_schema_345;
-  record: anonymous_schema_346;
-}
-
-export interface anonymous_schema_345 {
-  taskId: string;
-  appId: string;
-  hint?: string;
-  sessionId?: string;
-  name: string;
-  label: string;
-  description?: string;
-  intents?: TaskIntentDto[];
-  events?: TaskEventDto[];
-  fields: TaskFieldDto[];
-  options?: anonymous_schema_170;
-}
-
-export interface anonymous_schema_346 {
-  recordId: string;
-  taskId: string;
-  appId: string;
-  sessionId: string;
-  status?: TaskEventType;
-  values: Record<string, any>;
-  updated?: string;
-  created?: string;
-}
-
-export interface DialogueTaskRecordChangedDto {
-  appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
-  operation: string;
-  sessionId?: string;
-  record: DialogueTaskRecordDto;
-}
-
-export interface DialogueTaskRecordHandlerDto {
-  appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
-  sessionId?: string;
-  taskId: string;
-  recordId: string;
-  field: anonymous_schema_369;
-}
-
-export interface anonymous_schema_369 {
-  name: string;
-  label?: string;
-  hint?: string;
-  order?: number;
-  uiOptions?: anonymous_schema_153;
-  skipResponse?: boolean;
-  type: TaskSchemaDataType;
-  required?: boolean;
-  validation?: string;
-  condition?: string;
-  prompt?: string;
-  handler?: string;
-  multiple?: boolean;
-  options?: OptionSelection[];
-}
 
 export interface DialogueToolTriggeredEventDto {
   appId: string;
@@ -445,12 +546,12 @@ export interface DialogueToolsRepositoryRecordDto {
   userId?: string;
   ts?: string;
   sessionId?: string;
-  repositoryId?: string;
-  options?: anonymous_schema_391;
-  tools?: any[][];
+  repositoryId: string;
+  options?: anonymous_schema_458;
+  tools?: AppToolsDTO[];
 }
 
-export interface anonymous_schema_391 {
+export interface anonymous_schema_458 {
   triggerOnce?: boolean;
   exclusive?: boolean;
 }
@@ -464,7 +565,7 @@ export interface DialogueToolNotMatchingEventDto {
   currentField?: TaskFieldDto;
 }
 
-export interface SessionChangedDto {
+export interface DialogueTaskChangedDto {
   appId: string;
   clientId?: string;
   requestId?: string;
@@ -472,22 +573,53 @@ export interface SessionChangedDto {
   ts?: string;
   operation: string;
   sessionId?: string;
-  record: SessionDto;
+  record: DialogueTaskDto;
 }
 
-export interface SessionSupportEventDto {
+export interface DialogueTaskProgressDto {
+  type: anonymous_schema_473;
+  task: anonymous_schema_474;
+  record: anonymous_schema_475;
+}
+
+export type anonymous_schema_473 =
+  | 'started'
+  | 'completed'
+  | 'ongoing'
+  | 'aborted';
+
+export interface anonymous_schema_474 {
+  taskId: string;
   appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
-  supportId: string;
-  status: string;
-  feedback: string;
-  code: string;
+  hint?: string;
+  sessionId?: string;
+  name: string;
+  label: string;
+  description?: string;
+  intents?: TaskIntentDto[];
+  events?: TaskEventDto[];
+  fields: TaskFieldDto[];
+  options?: anonymous_schema_195;
 }
 
-export interface SessionStorageEventDto {
+export interface anonymous_schema_475 {
+  recordId: string;
+  taskId: string;
+  appId: string;
+  sessionId: string;
+  status?: anonymous_schema_480;
+  values: Record<string, any>;
+  updated?: string;
+  created?: string;
+}
+
+export type anonymous_schema_480 =
+  | 'started'
+  | 'completed'
+  | 'ongoing'
+  | 'aborted';
+
+export interface DialogueTaskRecordChangedDto {
   appId: string;
   clientId?: string;
   requestId?: string;
@@ -495,21 +627,62 @@ export interface SessionStorageEventDto {
   ts?: string;
   operation: string;
   sessionId?: string;
-  record: SessionStorageRecordDto;
+  record: DialogueTaskRecordDto;
 }
 
-export interface AgentDto {
+export interface DialogueTaskRecordHandlerDto {
   appId: string;
   clientId?: string;
   requestId?: string;
   userId?: string;
   ts?: string;
-  agentId: string;
-  status: AgentStatus;
-  modules: string[];
+  sessionId?: string;
+  taskId: string;
+  recordId: string;
+  field: anonymous_schema_499;
 }
 
-export interface AgentChangedDto {
+export interface anonymous_schema_499 {
+  name: string;
+  label?: string;
+  hint?: string;
+  order?: number;
+  uiOptions?: anonymous_schema_177;
+  skipResponse?: boolean;
+  type: anonymous_schema_183;
+  required?: boolean;
+  validation?: string;
+  condition?: string;
+  prompt?: string;
+  handler?: string;
+  multiple?: boolean;
+  options?: OptionSelection[];
+}
+
+export type anonymous_schema_502 =
+  | 'characterization'
+  | 'stt'
+  | 'tts'
+  | 'interaction'
+  | 'session'
+  | 'document'
+  | 'chat'
+  | 'task'
+  | 'performance'
+  | 'kpi'
+  | 'error'
+  | 'llm'
+  | 'log';
+
+export interface PlatformTokenDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+}
+
+export interface PlatformAppModuleConfigEventDto {
   appId: string;
   clientId?: string;
   requestId?: string;
@@ -517,65 +690,7 @@ export interface AgentChangedDto {
   ts?: string;
   operation: string;
   sessionId?: string;
-  moduleId: string;
-  record: AgentDto;
-  settings?: AppSettingsDto;
-}
-
-export interface UIAssetChangedDto {
-  appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
-  operation: string;
-  sessionId?: string;
-  record: UIAssetDto;
-}
-
-export interface anonymous_schema_482 {
-  repositoryId?: string;
-  chunks?: Record<string, any>[];
-  additionalProperties?: Record<string, any>;
-}
-
-export interface anonymous_schema_487 {
-  clearScreen?: boolean;
-  ttsEnabled?: boolean;
-  stopSpeech?: boolean;
-  language?: string;
-  additionalProperties?: Record<string, any>;
-}
-
-export interface UIInteractionEventDto {
-  appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
-  sessionId?: string;
-  moduleId: string;
-  interaction: UIInteractionDTO;
-}
-
-export interface XRMarkerChangedDto {
-  appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
-  operation: string;
-  sessionId?: string;
-  record: XRMarkerDto;
-}
-
-export interface XROcclusionDto {
-  appId: string;
-  clientId?: string;
-  requestId?: string;
-  userId?: string;
-  ts?: string;
-  occlusion: boolean;
+  record: AppModuleConfigDto;
 }
 
 export interface InitialPoseEventDto {
@@ -604,4 +719,47 @@ export interface OperationalStateEventDto {
 export interface OperationalStateDto {
   op: string;
   state: string;
+}
+
+export interface SessionStorageEventDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  operation: string;
+  sessionId?: string;
+  record: SessionStorageRecordDto;
+}
+
+export interface SessionSupportEventDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  supportId: string;
+  status: string;
+  feedback: string;
+  code: string;
+}
+
+export interface XRMarkerChangedDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  operation: string;
+  sessionId?: string;
+  record: XRMarkerDto;
+}
+
+export interface XROcclusionDto {
+  appId: string;
+  clientId?: string;
+  requestId?: string;
+  userId?: string;
+  ts?: string;
+  occlusion: boolean;
 }

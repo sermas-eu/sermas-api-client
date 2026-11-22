@@ -2,8 +2,8 @@
 
 import { Broker } from '../broker';
 
-import { UIAssetChangedDto, UIInteractionEventDto } from './models';
-import { UIContentDto } from '../openapi/models';
+import type { UIAssetChangedDto, UIInteractionEventDto } from './models';
+import type { UIContentDto } from '../openapi/models';
 
 export class Ui {
   constructor(private readonly broker: Broker) {}

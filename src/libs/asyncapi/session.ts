@@ -2,17 +2,58 @@
 
 import { Broker } from '../broker';
 
-import {
-  SessionChangedDto,
-  SessionSupportEventDto,
-  SessionStorageEventDto,
+import type {
   AgentDto,
   AgentChangedDto,
+  SessionChangedDto,
+  SessionStorageEventDto,
+  SessionSupportEventDto,
 } from './models';
-import { SessionDto } from '../openapi/models';
+import type { SessionDto } from '../openapi/models';
 
 export class Session {
   constructor(private readonly broker: Broker) {}
+
+  async agentInteraction(event: AgentDto, params?: { appId?: string }) {
+    return this.broker.publish<AgentDto>(
+      'app/:appId/session/interaction/agent',
+      event,
+      params,
+    );
+  }
+
+  async onAgentInteraction(
+    fn: (event: AgentDto) => void | Promise<void>,
+    params?: { appId?: string },
+  ): Promise<() => void> {
+    return this.broker.subscribe<AgentDto>(
+      'app/:appId/session/interaction/agent',
+      fn,
+      params,
+    );
+  }
+
+  async agentChanged(
+    event: AgentChangedDto,
+    params?: { appId?: string; agentId?: string },
+  ) {
+    return this.broker.publish<AgentChangedDto>(
+      'app/:appId/session/agent/changed/:agentId',
+      event,
+      params,
+    );
+  }
+
+  async onAgentChanged(
+    fn: (event: AgentChangedDto) => void | Promise<void>,
+    params?: { appId?: string; agentId?: string },
+  ): Promise<() => void> {
+    return this.broker.subscribe<AgentChangedDto>(
+      'app/:appId/session/agent/changed/:agentId',
+      fn,
+      params,
+    );
+  }
 
   async userInteraction(event: SessionDto, params?: { appId?: string }) {
     return this.broker.publish<SessionDto>(
@@ -55,25 +96,6 @@ export class Session {
     );
   }
 
-  async support(event: SessionSupportEventDto, params?: { appId?: string }) {
-    return this.broker.publish<SessionSupportEventDto>(
-      'app/:appId/session/support',
-      event,
-      params,
-    );
-  }
-
-  async onSupport(
-    fn: (event: SessionSupportEventDto) => void | Promise<void>,
-    params?: { appId?: string },
-  ): Promise<() => void> {
-    return this.broker.subscribe<SessionSupportEventDto>(
-      'app/:appId/session/support',
-      fn,
-      params,
-    );
-  }
-
   async storageUpdated(
     event: SessionStorageEventDto,
     params?: { appId?: string; storageId?: string },
@@ -96,42 +118,20 @@ export class Session {
     );
   }
 
-  async agentInteraction(event: AgentDto, params?: { appId?: string }) {
-    return this.broker.publish<AgentDto>(
-      'app/:appId/session/interaction/agent',
+  async support(event: SessionSupportEventDto, params?: { appId?: string }) {
+    return this.broker.publish<SessionSupportEventDto>(
+      'app/:appId/session/support',
       event,
       params,
     );
   }
 
-  async onAgentInteraction(
-    fn: (event: AgentDto) => void | Promise<void>,
+  async onSupport(
+    fn: (event: SessionSupportEventDto) => void | Promise<void>,
     params?: { appId?: string },
   ): Promise<() => void> {
-    return this.broker.subscribe<AgentDto>(
-      'app/:appId/session/interaction/agent',
-      fn,
-      params,
-    );
-  }
-
-  async agentChanged(
-    event: AgentChangedDto,
-    params?: { appId?: string; agentId?: string },
-  ) {
-    return this.broker.publish<AgentChangedDto>(
-      'app/:appId/session/agent/changed/:agentId',
-      event,
-      params,
-    );
-  }
-
-  async onAgentChanged(
-    fn: (event: AgentChangedDto) => void | Promise<void>,
-    params?: { appId?: string; agentId?: string },
-  ): Promise<() => void> {
-    return this.broker.subscribe<AgentChangedDto>(
-      'app/:appId/session/agent/changed/:agentId',
+    return this.broker.subscribe<SessionSupportEventDto>(
+      'app/:appId/session/support',
       fn,
       params,
     );

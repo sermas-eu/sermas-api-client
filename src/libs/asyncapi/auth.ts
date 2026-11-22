@@ -2,7 +2,7 @@
 
 import { Broker } from '../broker';
 
-import { UpdateUserEventDto } from './models';
+import type { UpdateUserEventDto } from './models';
 
 export class Auth {
   constructor(private readonly broker: Broker) {}

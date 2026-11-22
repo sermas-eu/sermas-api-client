@@ -2,35 +2,16 @@
 
 import { Broker } from '../broker';
 
-import {
-  PlatformTokenDto,
+import type {
   PlatformAppChangedDto,
   PlatformAppClientChangedDto,
+  PlatformTokenDto,
   PlatformAppModuleConfigEventDto,
 } from './models';
-import { MonitoringRecordDto } from '../openapi/models';
+import type { MonitoringRecordDto } from '../openapi/models';
 
 export class Platform {
   constructor(private readonly broker: Broker) {}
-
-  async tokenRequested(event: PlatformTokenDto, params?: { appId?: string }) {
-    return this.broker.publish<PlatformTokenDto>(
-      'app/:appId/platform/token',
-      event,
-      params,
-    );
-  }
-
-  async onTokenRequested(
-    fn: (event: PlatformTokenDto) => void | Promise<void>,
-    params?: { appId?: string },
-  ): Promise<() => void> {
-    return this.broker.subscribe<PlatformTokenDto>(
-      'app/:appId/platform/token',
-      fn,
-      params,
-    );
-  }
 
   async appChanged(event: PlatformAppChangedDto, params?: { appId?: string }) {
     return this.broker.publish<PlatformAppChangedDto>(
@@ -73,6 +54,44 @@ export class Platform {
     );
   }
 
+  async record(event: MonitoringRecordDto, params?: { appId?: string }) {
+    return this.broker.publish<MonitoringRecordDto>(
+      'app/:appId/platform/monitoring',
+      event,
+      params,
+    );
+  }
+
+  async onRecord(
+    fn: (event: MonitoringRecordDto) => void | Promise<void>,
+    params?: { appId?: string },
+  ): Promise<() => void> {
+    return this.broker.subscribe<MonitoringRecordDto>(
+      'app/:appId/platform/monitoring',
+      fn,
+      params,
+    );
+  }
+
+  async tokenRequested(event: PlatformTokenDto, params?: { appId?: string }) {
+    return this.broker.publish<PlatformTokenDto>(
+      'app/:appId/platform/token',
+      event,
+      params,
+    );
+  }
+
+  async onTokenRequested(
+    fn: (event: PlatformTokenDto) => void | Promise<void>,
+    params?: { appId?: string },
+  ): Promise<() => void> {
+    return this.broker.subscribe<PlatformTokenDto>(
+      'app/:appId/platform/token',
+      fn,
+      params,
+    );
+  }
+
   async appModuleChanged(
     event: PlatformAppModuleConfigEventDto,
     params?: { appId?: string },
@@ -90,25 +109,6 @@ export class Platform {
   ): Promise<() => void> {
     return this.broker.subscribe<PlatformAppModuleConfigEventDto>(
       'app/:appId/platform/module',
-      fn,
-      params,
-    );
-  }
-
-  async record(event: MonitoringRecordDto, params?: { appId?: string }) {
-    return this.broker.publish<MonitoringRecordDto>(
-      'app/:appId/platform/monitoring',
-      event,
-      params,
-    );
-  }
-
-  async onRecord(
-    fn: (event: MonitoringRecordDto) => void | Promise<void>,
-    params?: { appId?: string },
-  ): Promise<() => void> {
-    return this.broker.subscribe<MonitoringRecordDto>(
-      'app/:appId/platform/monitoring',
       fn,
       params,
     );

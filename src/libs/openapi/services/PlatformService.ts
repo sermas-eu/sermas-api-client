@@ -13,8 +13,8 @@ import type {
   PlatformAppDto,
   PlatformAppExportFilterDto,
   PlatformModuleConfigDto,
+  PlatformRefreshTokenRequestDto,
   PlatformSettingsDto,
-  RefreshTokenRequestDto,
   RepositoryAvatarDto,
   RepositoryConfigDto,
   RepositoryRobotModelDto,
@@ -29,10 +29,10 @@ export type TDataGetClientAccessToken1 = {
   requestBody: AccessTokenRequestDto;
 };
 export type TDataGetClientRefreshToken = {
-  requestBody: RefreshTokenRequestDto;
+  requestBody: PlatformRefreshTokenRequestDto;
 };
 export type TDataGetClientRefreshToken1 = {
-  requestBody: RefreshTokenRequestDto;
+  requestBody: PlatformRefreshTokenRequestDto;
 };
 export type TDataCreateApp = {
   requestBody: CreatePlatformAppDto;

@@ -2,20 +2,20 @@
 
 import { Broker } from '../broker';
 
-import {
+import type {
   DialogueProgressEventDto,
   DialogueAvatarSpeechControlDto,
   DialogueSpeechToTextDto,
   DialogueSessionRequestDto,
+  DialogueToolTriggeredEventDto,
+  DialogueToolsRepositoryChanged,
+  DialogueToolNotMatchingEventDto,
   DialogueTaskChangedDto,
   DialogueTaskProgressDto,
   DialogueTaskRecordChangedDto,
   DialogueTaskRecordHandlerDto,
-  DialogueToolTriggeredEventDto,
-  DialogueToolsRepositoryChanged,
-  DialogueToolNotMatchingEventDto,
 } from './models';
-import { DialogueMessageDto, Buffer } from '../openapi/models';
+import type { DialogueMessageDto, Buffer } from '../openapi/models';
 
 export class Dialogue {
   constructor(private readonly broker: Broker) {}
@@ -228,6 +228,72 @@ export class Dialogue {
     );
   }
 
+  async toolTriggered(
+    event: DialogueToolTriggeredEventDto,
+    params?: { appId?: string; name?: string },
+  ) {
+    return this.broker.publish<DialogueToolTriggeredEventDto>(
+      'app/:appId/dialogue/tool/:name',
+      event,
+      params,
+    );
+  }
+
+  async onToolTriggered(
+    fn: (event: DialogueToolTriggeredEventDto) => void | Promise<void>,
+    params?: { appId?: string; name?: string },
+  ): Promise<() => void> {
+    return this.broker.subscribe<DialogueToolTriggeredEventDto>(
+      'app/:appId/dialogue/tool/:name',
+      fn,
+      params,
+    );
+  }
+
+  async toolChanged(
+    event: DialogueToolsRepositoryChanged,
+    params?: { appId?: string; repositoryId?: string },
+  ) {
+    return this.broker.publish<DialogueToolsRepositoryChanged>(
+      'app/:appId/dialogue/tool/changed/:repositoryId',
+      event,
+      params,
+    );
+  }
+
+  async onToolChanged(
+    fn: (event: DialogueToolsRepositoryChanged) => void | Promise<void>,
+    params?: { appId?: string; repositoryId?: string },
+  ): Promise<() => void> {
+    return this.broker.subscribe<DialogueToolsRepositoryChanged>(
+      'app/:appId/dialogue/tool/changed/:repositoryId',
+      fn,
+      params,
+    );
+  }
+
+  async toolNotMatching(
+    event: DialogueToolNotMatchingEventDto,
+    params?: { appId?: string },
+  ) {
+    return this.broker.publish<DialogueToolNotMatchingEventDto>(
+      'app/:appId/dialogue/tool/not-matching',
+      event,
+      params,
+    );
+  }
+
+  async onToolNotMatching(
+    fn: (event: DialogueToolNotMatchingEventDto) => void | Promise<void>,
+    params?: { appId?: string },
+  ): Promise<() => void> {
+    return this.broker.subscribe<DialogueToolNotMatchingEventDto>(
+      'app/:appId/dialogue/tool/not-matching',
+      fn,
+      params,
+    );
+  }
+
   async taskChanged(
     event: DialogueTaskChangedDto,
     params?: { appId?: string; taskId?: string },
@@ -311,72 +377,6 @@ export class Dialogue {
   ): Promise<() => void> {
     return this.broker.subscribe<DialogueTaskRecordHandlerDto>(
       'app/:appId/dialogue/task/handler',
-      fn,
-      params,
-    );
-  }
-
-  async toolTriggered(
-    event: DialogueToolTriggeredEventDto,
-    params?: { appId?: string; name?: string },
-  ) {
-    return this.broker.publish<DialogueToolTriggeredEventDto>(
-      'app/:appId/dialogue/tool/:name',
-      event,
-      params,
-    );
-  }
-
-  async onToolTriggered(
-    fn: (event: DialogueToolTriggeredEventDto) => void | Promise<void>,
-    params?: { appId?: string; name?: string },
-  ): Promise<() => void> {
-    return this.broker.subscribe<DialogueToolTriggeredEventDto>(
-      'app/:appId/dialogue/tool/:name',
-      fn,
-      params,
-    );
-  }
-
-  async toolChanged(
-    event: DialogueToolsRepositoryChanged,
-    params?: { appId?: string; repositoryId?: string },
-  ) {
-    return this.broker.publish<DialogueToolsRepositoryChanged>(
-      'app/:appId/dialogue/tool/changed/:repositoryId',
-      event,
-      params,
-    );
-  }
-
-  async onToolChanged(
-    fn: (event: DialogueToolsRepositoryChanged) => void | Promise<void>,
-    params?: { appId?: string; repositoryId?: string },
-  ): Promise<() => void> {
-    return this.broker.subscribe<DialogueToolsRepositoryChanged>(
-      'app/:appId/dialogue/tool/changed/:repositoryId',
-      fn,
-      params,
-    );
-  }
-
-  async toolNotMatching(
-    event: DialogueToolNotMatchingEventDto,
-    params?: { appId?: string },
-  ) {
-    return this.broker.publish<DialogueToolNotMatchingEventDto>(
-      'app/:appId/dialogue/tool/not-matching',
-      event,
-      params,
-    );
-  }
-
-  async onToolNotMatching(
-    fn: (event: DialogueToolNotMatchingEventDto) => void | Promise<void>,
-    params?: { appId?: string },
-  ): Promise<() => void> {
-    return this.broker.subscribe<DialogueToolNotMatchingEventDto>(
-      'app/:appId/dialogue/tool/not-matching',
       fn,
       params,
     );

@@ -1,6 +1,7 @@
 import type {
   ActuationEventDto,
   MovementEventDto,
+  NavigationSpaceDto,
   SermasBaseDto,
   StatusEventDto,
 } from '../models';
@@ -27,10 +28,16 @@ export type TDataRoboticsAgentControllerActuate = {
 export type TDataRoboticsAgentControllerStatus = {
   requestBody: StatusEventDto;
 };
+export type TDataNavigationControllerSave = {
+  appId: string;
+  requestBody: NavigationSpaceDto;
+};
 export type TDataNavigationControllerRemove = {
+  appId: string;
   spaceId: string;
 };
 export type TDataNavigationControllerGetById = {
+  appId: string;
   spaceId: string;
 };
 export type TDataNavigationControllerGetStatus = {
@@ -151,10 +158,18 @@ export class RoboticsService {
    * @returns any
    * @throws ApiError
    */
-  public navigationControllerSave(): CancelablePromise<any> {
+  public navigationControllerSave(
+    data: TDataNavigationControllerSave,
+  ): CancelablePromise<any> {
+    const { appId, requestBody } = data;
     return this.httpRequest.request({
       method: 'POST',
       url: '/api/robotics/navigation/{appId}',
+      path: {
+        appId,
+      },
+      body: requestBody,
+      mediaType: 'application/json',
     });
   }
 
@@ -165,11 +180,12 @@ export class RoboticsService {
   public navigationControllerRemove(
     data: TDataNavigationControllerRemove,
   ): CancelablePromise<any> {
-    const { spaceId } = data;
+    const { appId, spaceId } = data;
     return this.httpRequest.request({
       method: 'DELETE',
-      url: '/api/robotics/navigation/{appId}/spaceId',
+      url: '/api/robotics/navigation/{appId}/{spaceId}',
       path: {
+        appId,
         spaceId,
       },
     });
@@ -182,11 +198,12 @@ export class RoboticsService {
   public navigationControllerGetById(
     data: TDataNavigationControllerGetById,
   ): CancelablePromise<any> {
-    const { spaceId } = data;
+    const { appId, spaceId } = data;
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/robotics/navigation/{appId}/{spaceId}',
       path: {
+        appId,
         spaceId,
       },
     });

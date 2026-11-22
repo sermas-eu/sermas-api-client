@@ -1,4 +1,4 @@
-import { LogLevel, LoggerService } from './logger.dto';
+import type { LogLevel, LoggerService } from './logger.dto';
 
 let defaultLogger: LoggerService;
 
@@ -35,12 +35,12 @@ const createDefaultLogger = (name = 'logger'): LoggerService =>
   })();
 
 export class Logger implements LoggerService {
-  private readonly logger;
+  private readonly logger: LoggerService & { info?: (m: any) => any };
   constructor(name: string) {
     this.logger = defaultLogger ? defaultLogger : createDefaultLogger(name);
   }
   debug(message: any, ...optionalParams: any[]) {
-    this.logger.debug(message);
+    (this.logger.debug || this.logger.log).apply(this.logger, [message]);
   }
   error(message: any, ...optionalParams: any[]) {
     this.logger.error(message);
@@ -55,7 +55,7 @@ export class Logger implements LoggerService {
     //
   }
   verbose(message: any, ...optionalParams: any[]) {
-    this.logger.verbose(message);
+    (this.logger.verbose || this.logger.log).apply(this.logger, [message]);
   }
   warn(message: any, ...optionalParams: any[]) {
     this.logger.warn(message);
