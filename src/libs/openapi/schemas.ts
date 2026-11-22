@@ -607,6 +607,32 @@ export const $ToolsRequestSchema = {
   },
 } as const;
 
+export const $ToolUIContentDto = {
+  properties: {
+    contentType: {
+      type: 'string',
+      description: `A UI content type: image, video, link, quiz, buttons, html, webpage, pdf, …`,
+      isRequired: true,
+    },
+    content: {
+      type: 'dictionary',
+      contains: {
+        properties: {},
+      },
+      isRequired: true,
+    },
+    description: {
+      type: 'string',
+    },
+    options: {
+      type: 'dictionary',
+      contains: {
+        properties: {},
+      },
+    },
+  },
+} as const;
+
 export const $AppToolsDTO = {
   properties: {
     name: {
@@ -634,9 +660,14 @@ export const $AppToolsDTO = {
         },
       ],
     },
-    emitter: {
-      type: 'string',
-      description: `Internal event emitted on match`,
+    ui: {
+      type: 'all-of',
+      description: `UI content shown in the client when the tool matches (an image, a quiz, a link…)`,
+      contains: [
+        {
+          type: 'ToolUIContentDto',
+        },
+      ],
     },
     returnDirect: {
       type: 'boolean',

@@ -152,20 +152,27 @@ export interface anonymous_schema_132 {
   refreshUrl?: string;
 }
 
-export type anonymous_schema_160 =
+export interface anonymous_schema_144 {
+  contentType: string;
+  content: Record<string, any>;
+  description?: string;
+  options?: Record<string, any>;
+}
+
+export type anonymous_schema_164 =
   | 'started'
   | 'completed'
   | 'ongoing'
   | 'aborted';
 
-export interface anonymous_schema_173 {
+export interface anonymous_schema_177 {
   clearScreen?: boolean;
   ttsEnabled?: boolean;
   stopSpeech?: boolean;
   language?: string;
 }
 
-export type anonymous_schema_179 =
+export type anonymous_schema_183 =
   | 'text'
   | 'boolean'
   | 'date'
@@ -173,18 +180,18 @@ export type anonymous_schema_179 =
   | 'eval'
   | 'external';
 
-export interface anonymous_schema_191 {
+export interface anonymous_schema_195 {
   triggerOnce?: boolean;
   removeRecord?: boolean;
   enableTool?: boolean;
-  toolOptions?: anonymous_schema_195;
+  toolOptions?: anonymous_schema_199;
   repositoryId?: string;
   list?: boolean;
   oncePerSession?: boolean;
   matchOrRemove?: boolean;
 }
 
-export interface anonymous_schema_195 {
+export interface anonymous_schema_199 {
   triggerOnce?: boolean;
   exclusive?: boolean;
 }
@@ -241,7 +248,7 @@ export interface StringInferenceValue {
   value: string;
 }
 
-export type anonymous_schema_245 = 'start' | 'stop';
+export type anonymous_schema_249 = 'start' | 'stop';
 
 export interface UserCharacterizationEventDto {
   appId: string;
@@ -334,14 +341,14 @@ export interface UIAssetChangedDto {
   record: UIAssetDto;
 }
 
-export type anonymous_schema_303 =
+export type anonymous_schema_307 =
   | 'avatars'
   | 'backgrounds'
   | 'robots'
   | 'documents'
   | 'animations';
 
-export type anonymous_schema_316 =
+export type anonymous_schema_320 =
   | 'video'
   | 'image'
   | 'pdf'
@@ -360,13 +367,13 @@ export type anonymous_schema_316 =
   | 'qrcode-scanner'
   | 'background-audio';
 
-export interface anonymous_schema_319 {
+export interface anonymous_schema_323 {
   repositoryId?: string;
   chunks?: Record<string, any>[];
   additionalProperties?: Record<string, any>;
 }
 
-export interface anonymous_schema_324 {
+export interface anonymous_schema_328 {
   clearScreen?: boolean;
   ttsEnabled?: boolean;
   stopSpeech?: boolean;
@@ -392,11 +399,11 @@ export interface AgentDto {
   userId?: string;
   ts?: string;
   agentId: string;
-  status: anonymous_schema_345;
+  status: anonymous_schema_349;
   modules: string[];
 }
 
-export type anonymous_schema_345 =
+export type anonymous_schema_349 =
   | 'unavailable'
   | 'error'
   | 'not_ready'
@@ -439,11 +446,12 @@ export interface DialogueProgressEventDto {
   sessionId?: string;
   event: string;
   status?: string;
+  error?: string;
 }
 
-export type anonymous_schema_390 = 'user' | 'agent';
+export type anonymous_schema_395 = 'user' | 'agent';
 
-export interface anonymous_schema_395 {
+export interface anonymous_schema_400 {
   chat?: string;
   tools?: string;
   sentiment?: string;
@@ -469,12 +477,12 @@ export interface DialogueSpeechToTextDto {
   userId?: string;
   ts?: string;
   sessionId?: string;
-  actor?: anonymous_schema_414;
+  actor?: anonymous_schema_419;
   text: string;
   gender?: string;
   language?: string;
   emotion?: string;
-  llm?: anonymous_schema_419;
+  llm?: anonymous_schema_424;
   avatar?: string;
   messageId?: string;
   chunkId?: string;
@@ -482,9 +490,9 @@ export interface DialogueSpeechToTextDto {
   isWelcome?: boolean;
 }
 
-export type anonymous_schema_414 = 'user' | 'agent';
+export type anonymous_schema_419 = 'user' | 'agent';
 
-export interface anonymous_schema_419 {
+export interface anonymous_schema_424 {
   chat?: string;
   tools?: string;
   sentiment?: string;
@@ -500,10 +508,10 @@ export interface DialogueSessionRequestDto {
   userId?: string;
   ts?: string;
   sessionId?: string;
-  status: anonymous_schema_431;
+  status: anonymous_schema_436;
 }
 
-export type anonymous_schema_431 =
+export type anonymous_schema_436 =
   | 'started'
   | 'processing'
   | 'ended'
@@ -539,11 +547,11 @@ export interface DialogueToolsRepositoryRecordDto {
   ts?: string;
   sessionId?: string;
   repositoryId: string;
-  options?: anonymous_schema_453;
+  options?: anonymous_schema_458;
   tools?: AppToolsDTO[];
 }
 
-export interface anonymous_schema_453 {
+export interface anonymous_schema_458 {
   triggerOnce?: boolean;
   exclusive?: boolean;
 }
@@ -569,18 +577,18 @@ export interface DialogueTaskChangedDto {
 }
 
 export interface DialogueTaskProgressDto {
-  type: anonymous_schema_468;
-  task: anonymous_schema_469;
-  record: anonymous_schema_470;
+  type: anonymous_schema_473;
+  task: anonymous_schema_474;
+  record: anonymous_schema_475;
 }
 
-export type anonymous_schema_468 =
+export type anonymous_schema_473 =
   | 'started'
   | 'completed'
   | 'ongoing'
   | 'aborted';
 
-export interface anonymous_schema_469 {
+export interface anonymous_schema_474 {
   taskId: string;
   appId: string;
   hint?: string;
@@ -591,21 +599,21 @@ export interface anonymous_schema_469 {
   intents?: TaskIntentDto[];
   events?: TaskEventDto[];
   fields: TaskFieldDto[];
-  options?: anonymous_schema_191;
+  options?: anonymous_schema_195;
 }
 
-export interface anonymous_schema_470 {
+export interface anonymous_schema_475 {
   recordId: string;
   taskId: string;
   appId: string;
   sessionId: string;
-  status?: anonymous_schema_475;
+  status?: anonymous_schema_480;
   values: Record<string, any>;
   updated?: string;
   created?: string;
 }
 
-export type anonymous_schema_475 =
+export type anonymous_schema_480 =
   | 'started'
   | 'completed'
   | 'ongoing'
@@ -631,17 +639,17 @@ export interface DialogueTaskRecordHandlerDto {
   sessionId?: string;
   taskId: string;
   recordId: string;
-  field: anonymous_schema_494;
+  field: anonymous_schema_499;
 }
 
-export interface anonymous_schema_494 {
+export interface anonymous_schema_499 {
   name: string;
   label?: string;
   hint?: string;
   order?: number;
-  uiOptions?: anonymous_schema_173;
+  uiOptions?: anonymous_schema_177;
   skipResponse?: boolean;
-  type: anonymous_schema_179;
+  type: anonymous_schema_183;
   required?: boolean;
   validation?: string;
   condition?: string;
@@ -651,7 +659,7 @@ export interface anonymous_schema_494 {
   options?: OptionSelection[];
 }
 
-export type anonymous_schema_497 =
+export type anonymous_schema_502 =
   | 'characterization'
   | 'stt'
   | 'tts'

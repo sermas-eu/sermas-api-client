@@ -258,6 +258,22 @@ export type ToolsRequestSchema = {
   headers?: Record<string, unknown>;
 };
 
+export type ToolUIContentDto = {
+  /**
+   * A UI content type: image, video, link, quiz, buttons, html, webpage, pdf, …
+   */
+  contentType: string;
+  /**
+   * The content for that type, e.g. `{ src, alt }` for an image
+   */
+  content: Record<string, unknown>;
+  description?: string;
+  /**
+   * UI content options
+   */
+  options?: Record<string, unknown>;
+};
+
 export type AppToolsDTO = {
   /**
    * Tool name used in the LLM, a descriptive name may help in identifying it correctly
@@ -276,9 +292,9 @@ export type AppToolsDTO = {
    */
   request?: ToolsRequestSchema;
   /**
-   * Internal event emitted on match
+   * UI content shown in the client when the tool matches (an image, a quiz, a link…)
    */
-  emitter?: string;
+  ui?: ToolUIContentDto;
   returnDirect?: boolean;
   /**
    * Ignore the LLM response when the tool matches
